@@ -19,7 +19,14 @@ var g = svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
+// Create functions to help parse our data on read-in:
 var parseDate = d3.timeParse("%Y-%m-%d");
+
+// timeParsing Documentation:
+// https://github.com/d3/d3-time-format/blob/master/README.md#timeParse
+var formatYear = d3.timeFormat("%Y")
+var formatMonth = d3.timeFormat("%m")
+
 
 function parseBoolean(dat){
   switch(dat.toLowerCase()) {
@@ -47,6 +54,29 @@ d3.csv("fatal-police-shootings-data.csv", function(d) {
 
 
 function createHeatmap(pol = data) {
-  console.log(pol);
+  
+  // Create aggregation at the year-month level.
+  var pol_agg = d3.nest()
+    .key(function(d) { return formatYear(d.date) + "-" + formatMonth(d.date); })
+    .rollup(function(leaves) { return leaves.length; })
+    .entries(pol);
+
+  console.log("The data after the nesting and rollup:")
+  console.log(pol_agg)
+
+
+  // Then use a map function to create three distinct key-value pairs for year/month/count:
+  pol_agg = pol_agg
+    .map(function(d){ 
+      return {
+        year: +d.key.substring(0,4),
+        month: +d.key.substring(5,7),
+        count: +d.value
+      };
+    });
+
+  console.log("The data after the map:")
+  console.log(pol_agg)
+
 };
 
