@@ -7,7 +7,7 @@ h2 {
 }
 
 svg {
-  background-color: #DADFFF;
+  background-color: #EAEFFF;
 }
 
 rect.tiles {
@@ -15,9 +15,12 @@ rect.tiles {
   stroke-width:3px;   
 }
 
-
-text.yearLabel {
+text.yearLabel,
+text.monthLabel,
+text.legendLabel {
   font-size: 12pt;
   font-family: Consolas, courier;
   fill: #888;
 }
+
+

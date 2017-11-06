@@ -30,7 +30,7 @@ var parseDate = d3.timeParse("%Y-%m-%d");
 var formatYear = d3.timeFormat("%Y")
 var formatMonth = d3.timeFormat("%m")
 
-
+// function to change string input into JS Boolean format:
 function parseBoolean(dat){
   switch(dat.toLowerCase()) {
     case "true": return true;
@@ -94,7 +94,7 @@ function createHeatmap(pol = data) {
       d3.max(pol_agg_lim, function (d) { return d.count; })])
     .range(colors);
 
-  // 
+  // create rects for each heatmap tile
   var tiles = g.selectAll(".tiles")
     .data(pol_agg_lim)
     .enter()
@@ -126,11 +126,12 @@ function createHeatmap(pol = data) {
       .attr("y", -5)
       .attr("class", "yearLabel");
 
+  // Create a new g element within which we will create a color legend
   var colLegend = g.selectAll(".legend")
     .data(colorScale.quantiles(), function(d) { return d; })
-    .enter().append("g")
-      .attr("class", "legend");
-    
+    .enter().append("g");
+
+  // Create a color legend with series of rects, coloring them with the color palette.  
   colLegend.append("rect")
     .attr("x", function(d, i) { return 150 + (((width * 2/3)/6) * i); })
     .attr("y", height + margin.top)
@@ -138,11 +139,12 @@ function createHeatmap(pol = data) {
     .attr("height", 10)
     .style("fill", function(d, i) { return colors[i]; });
 
-  // Add text to color legend
+  // Add text to color legend, returning the quantiles as labels.
   colLegend.append("text")
     .text(function(d) { return "≥ " + Math.round(d); })
     .attr("x", function(d, i) { return  150 + (((width * 2/3)/6) * i); })
-    .attr("y", height + margin.top - 5);
+    .attr("y", height + margin.top - 5)
+    .attr("class", "legendLabel");
 
 };
 
