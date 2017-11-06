@@ -100,10 +100,13 @@ function createHeatmap(pol = data) {
     .data(pol_agg)
     .enter()
     .append("rect")
+    .attr("class", "tiles")
     .attr("x", function(d){ return xScale(d.month)})
     .attr("y", function(d){ return yScale(d.year)})
-    .attr("width", 50)
-    .attr("height", 50)
+    .attr("rx", 10)
+    .attr("ry", 10)
+    .attr("width", 60)
+    .attr("height", 60)
     .style("fill", function(d){ return colorScale(d.count)});
 
 };

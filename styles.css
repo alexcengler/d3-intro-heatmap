@@ -9,3 +9,8 @@ h2 {
 svg {
   background-color: #DADFFF;
 }
+
+rect {
+  stroke: #FEF0D9;
+  stroke-width:3px;   
+}
