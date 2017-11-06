@@ -61,10 +61,6 @@ function createHeatmap(pol = data) {
     .rollup(function(leaves) { return leaves.length; })
     .entries(pol);
 
-  console.log("The data after the nesting and rollup:")
-  console.log(pol_agg)
-
-
   // Then use a map function to create three distinct key-value pairs for year/month/count:
   pol_agg = pol_agg
     .map(function(d){ 
@@ -75,8 +71,15 @@ function createHeatmap(pol = data) {
       };
     });
 
-  console.log("The data after the map:")
-  console.log(pol_agg)
+  var tiles = g.selectAll(".tiles")
+    .data(pol_agg)
+    .enter()
+    .append("rect")
+    .attr("x", function(d){ return d.month * 50})
+    .attr("y", function(d){ return (d.year - 2015) * 50})
+    .attr("width", 30)
+    .attr("height", 30)
+    .style("fill", "rgb(255, 99, 71)");
 
 };
 
