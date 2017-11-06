@@ -19,8 +19,24 @@ var g = svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
+var parseDate = d3.timeParse("%Y-%m-%d");
 
-d3.csv("fatal-police-shootings-data.csv", function(error, data){
+function parseBoolean(dat){
+  switch(dat.toLowerCase()) {
+    case "true": return true;
+    case "false": return false;
+  };
+};
+
+
+d3.csv("fatal-police-shootings-data.csv", function(d) {
+  return {
+    race: d.race,
+    gender: d.gender,
+    bodyCamera: parseBoolean(d.body_camera),
+    date: parseDate(d.date)
+  }
+}, function(error, data){
   // Simple error handling
   if(error) { 
     console.log(error);

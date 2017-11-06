@@ -3,6 +3,9 @@
 h1,
 h2 {
   font-family: Gotham;
+  text-indent: 50px;
 }
 
-
+svg {
+  background-color: #DADFFF;
+}
