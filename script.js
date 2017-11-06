@@ -2,9 +2,9 @@
 
 
 // Set Spacing Guidelines
-var margin = {top: 10, right: 75, bottom: 100, left: 50}
+var margin = {top: 60, right: 75, bottom: 100, left: 50}
 var width = 800 - margin.left - margin.right;
-var height = 250 - margin.top - margin.bottom;
+var height = 300 - margin.top - margin.bottom;
 
 // Create Color Palette:
 var colors = ['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#ef6548','#d7301f','#990000'];
@@ -108,6 +108,17 @@ function createHeatmap(pol = data) {
     .attr("width", 60)
     .attr("height", 60)
     .style("fill", function(d){ return colorScale(d.count)});
+
+  var colLegend = g.selectAll(".legend")
+    .data(colorScale.quantiles(), function(d) { return d; })
+    .enter().append("g")
+      .attr("class", "legend")
+    .append("rect")
+      .attr("x", function(d, i) { return 150 + (((width * 2/3)/6) * i); })
+      .attr("y", height + margin.top + margin.bottom/4)
+      .attr("width", ((width * 2/3)/6))
+      .attr("height", 10)
+      .style("fill", function(d, i) { return colors[i]; });
 
 };
 

@@ -10,7 +10,7 @@ svg {
   background-color: #DADFFF;
 }
 
-rect {
+rect.tiles {
   stroke: #FEF0D9;
   stroke-width:3px;   
 }
