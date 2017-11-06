@@ -2,9 +2,9 @@
 
 
 // Set Spacing Guidelines
-var margin = {top: 60, right: 75, bottom: 100, left: 50}
+var margin = {top: 100, right: 75, bottom: 125, left: 50}
 var width = 800 - margin.left - margin.right;
-var height = 300 - margin.top - margin.bottom;
+var height = 400 - margin.top - margin.bottom;
 
 // Create Color Palette:
 var colors = ['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#ef6548','#d7301f','#990000'];
@@ -117,6 +117,15 @@ function createHeatmap(pol = data) {
       .attr("y", function (d) { return yScale(d) + 35; })
       .attr("class", "yearLabel");
 
+  // monthLabels on the left of the heatmaps;
+  var monthLabels = g.selectAll(".monthLabel")
+    .data([1,2,3,4,5,6,7,8,9,10,11,12])
+    .enter().append("text")
+      .text(function (d) { return d; })
+      .attr("x", function (d) { return xScale(d) + 25; })
+      .attr("y", -5)
+      .attr("class", "yearLabel");
+
   var colLegend = g.selectAll(".legend")
     .data(colorScale.quantiles(), function(d) { return d; })
     .enter().append("g")
@@ -124,7 +133,7 @@ function createHeatmap(pol = data) {
     
   colLegend.append("rect")
     .attr("x", function(d, i) { return 150 + (((width * 2/3)/6) * i); })
-    .attr("y", height + margin.top + margin.bottom/4)
+    .attr("y", height + margin.top)
     .attr("width", ((width * 2/3)/6))
     .attr("height", 10)
     .style("fill", function(d, i) { return colors[i]; });
@@ -133,7 +142,7 @@ function createHeatmap(pol = data) {
   colLegend.append("text")
     .text(function(d) { return "≥ " + Math.round(d); })
     .attr("x", function(d, i) { return  150 + (((width * 2/3)/6) * i); })
-    .attr("y", height + margin.top + margin.bottom/4 - 3 );
+    .attr("y", height + margin.top - 5);
 
 };
 
