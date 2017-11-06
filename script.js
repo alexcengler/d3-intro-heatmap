@@ -19,3 +19,18 @@ var g = svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
+
+d3.csv("fatal-police-shootings-data.csv", function(error, data){
+  // Simple error handling
+  if(error) { 
+    console.log(error);
+  } else {
+    createHeatmap(data);
+  };
+});
+
+
+function createHeatmap(pol = data) {
+  console.log(pol);
+};
+
