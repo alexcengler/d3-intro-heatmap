@@ -1,7 +1,6 @@
 
 
 
-
 // Set Spacing Guidelines
 var margin = {top: 10, right: 75, bottom: 100, left: 50}
 var width = 800 - margin.left - margin.right;
@@ -73,7 +72,10 @@ function createHeatmap(pol = data) {
         month: +d.key.substring(5,7),
         count: +d.value
       };
+    }).filter(function(d) { 
+      return d.year != 2017 || d.month != 11 
     });
+
 
   // Create Scales
   var xScale = d3.scaleLinear()
@@ -86,11 +88,14 @@ function createHeatmap(pol = data) {
     .range([height,0])
     .nice();
 
-  // Color Scale using d3.scaleQuantize, which has a discrete range:
-  var colorScale = d3.scaleQuantize()
-      .domain([0, colors.length - 1, d3.max(pol_agg, function (d) { return d.count; })])
-      .range(colors);
+  // Color Scale using d3.scaleQuantile, which has a discrete range:
+  var colorScale = d3.scaleQuantile()
+    .domain([d3.min(pol_agg, function (d) { return d.count; }), 
+      colors.length - 1, 
+      d3.max(pol_agg, function (d) { return d.count; })])
+    .range(colors);
 
+  // 
   var tiles = g.selectAll(".tiles")
     .data(pol_agg)
     .enter()
