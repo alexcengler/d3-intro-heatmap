@@ -3,9 +3,9 @@
 
 
 // Set Spacing Guidelines
-var margin = {top: 10, right: 10, bottom: 40, left: 40}
-var width = 850 - margin.left - margin.right;
-var height = 450 - margin.top - margin.bottom;
+var margin = {top: 10, right: 75, bottom: 100, left: 50}
+var width = 800 - margin.left - margin.right;
+var height = 250 - margin.top - margin.bottom;
 
 // Create and Size SVG, where all of our visualization will appear:
 var svg = d3.select("#chart")
@@ -71,14 +71,25 @@ function createHeatmap(pol = data) {
       };
     });
 
+  // Create Scales
+  xScale = d3.scaleLinear()
+    .domain(d3.extent(pol_agg, function(d){ return d.month; }))
+    .range([0,width])
+    .nice();
+
+  yScale = d3.scaleLinear()
+    .domain(d3.extent(pol_agg, function(d){ return d.year; }))
+    .range([height,0])
+    .nice();
+
   var tiles = g.selectAll(".tiles")
     .data(pol_agg)
     .enter()
     .append("rect")
-    .attr("x", function(d){ return d.month * 50})
-    .attr("y", function(d){ return (d.year - 2015) * 50})
-    .attr("width", 30)
-    .attr("height", 30)
+    .attr("x", function(d){ return xScale(d.month)})
+    .attr("y", function(d){ return yScale(d.year)})
+    .attr("width", 50)
+    .attr("height", 50)
     .style("fill", "rgb(255, 99, 71)");
 
 };
