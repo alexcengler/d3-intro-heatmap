@@ -65,7 +65,7 @@ function createHeatmap(pol = data) {
     .entries(pol);
 
   // Then use a map function to create three distinct key-value pairs for year/month/count:
-  pol_agg = pol_agg
+  pol_agg_lim = pol_agg
     .map(function(d){ 
       return {
         year: +d.key.substring(0,4),
@@ -79,25 +79,29 @@ function createHeatmap(pol = data) {
 
   // Create Scales
   var xScale = d3.scaleLinear()
-    .domain(d3.extent(pol_agg, function(d){ return d.month; }))
+    .domain(d3.extent(pol_agg_lim, function(d){ return d.month; }))
     .range([0,width])
     .nice();
 
   var yScale = d3.scaleLinear()
-    .domain(d3.extent(pol_agg, function(d){ return d.year; }))
+    .domain(d3.extent(pol_agg_lim, function(d){ return d.year; }))
     .range([height,0])
     .nice();
 
   // Color Scale using d3.scaleQuantile, which has a discrete range:
   var colorScale = d3.scaleQuantile()
-    .domain([d3.min(pol_agg, function (d) { return d.count; }), 
-      colors.length - 1, 
-      d3.max(pol_agg, function (d) { return d.count; })])
+    .domain([d3.min(pol_agg_lim, function (d) { return d.count; }), 
+      d3.max(pol_agg_lim, function (d) { return d.count; })])
     .range(colors);
+
+  console.log(pol_agg_lim)
+  console.log(d3.min(pol_agg_lim, function (d) { return d.count; }))
+  console.log(d3.max(pol_agg_lim, function (d) { return d.count; }))
+  console.log(colorScale.quantiles());
 
   // 
   var tiles = g.selectAll(".tiles")
-    .data(pol_agg)
+    .data(pol_agg_lim)
     .enter()
     .append("rect")
     .attr("class", "tiles")
@@ -112,13 +116,20 @@ function createHeatmap(pol = data) {
   var colLegend = g.selectAll(".legend")
     .data(colorScale.quantiles(), function(d) { return d; })
     .enter().append("g")
-      .attr("class", "legend")
-    .append("rect")
-      .attr("x", function(d, i) { return 150 + (((width * 2/3)/6) * i); })
-      .attr("y", height + margin.top + margin.bottom/4)
-      .attr("width", ((width * 2/3)/6))
-      .attr("height", 10)
-      .style("fill", function(d, i) { return colors[i]; });
+      .attr("class", "legend");
+    
+  colLegend.append("rect")
+    .attr("x", function(d, i) { return 150 + (((width * 2/3)/6) * i); })
+    .attr("y", height + margin.top + margin.bottom/4)
+    .attr("width", ((width * 2/3)/6))
+    .attr("height", 10)
+    .style("fill", function(d, i) { return colors[i]; });
+
+  // Add text to color legend
+  colLegend.append("text")
+    .text(function(d) { return "≥ " + Math.round(d); })
+    .attr("x", function(d, i) { return  150 + (((width * 2/3)/6) * i); })
+    .attr("y", height + margin.top + margin.bottom/4 - 3 );
 
 };
 
