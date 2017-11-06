@@ -94,11 +94,6 @@ function createHeatmap(pol = data) {
       d3.max(pol_agg_lim, function (d) { return d.count; })])
     .range(colors);
 
-  console.log(pol_agg_lim)
-  console.log(d3.min(pol_agg_lim, function (d) { return d.count; }))
-  console.log(d3.max(pol_agg_lim, function (d) { return d.count; }))
-  console.log(colorScale.quantiles());
-
   // 
   var tiles = g.selectAll(".tiles")
     .data(pol_agg_lim)
@@ -112,6 +107,15 @@ function createHeatmap(pol = data) {
     .attr("width", 60)
     .attr("height", 60)
     .style("fill", function(d){ return colorScale(d.count)});
+
+  // yearLabels on the left of the heatmaps;
+  var yearLabels = g.selectAll(".yearLabel")
+    .data([2015,2016,2017])
+    .enter().append("text")
+      .text(function (d) { return d; })
+      .attr("x", -45)
+      .attr("y", function (d) { return yScale(d) + 35; })
+      .attr("class", "yearLabel");
 
   var colLegend = g.selectAll(".legend")
     .data(colorScale.quantiles(), function(d) { return d; })

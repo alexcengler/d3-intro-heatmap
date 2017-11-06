@@ -14,3 +14,10 @@ rect.tiles {
   stroke: #FEF0D9;
   stroke-width:3px;   
 }
+
+
+text.yearLabel {
+  font-size: 12pt;
+  font-family: Consolas, courier;
+  fill: #888;
+}
