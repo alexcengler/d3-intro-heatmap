@@ -7,6 +7,10 @@ var margin = {top: 10, right: 75, bottom: 100, left: 50}
 var width = 800 - margin.left - margin.right;
 var height = 250 - margin.top - margin.bottom;
 
+// Create Color Palette:
+var colors = ['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#ef6548','#d7301f','#990000'];
+// From ColorBrewer: http://colorbrewer2.org/#type=sequential&scheme=OrRd&n=7
+
 // Create and Size SVG, where all of our visualization will appear:
 var svg = d3.select("#chart")
     .append("svg")
@@ -72,15 +76,20 @@ function createHeatmap(pol = data) {
     });
 
   // Create Scales
-  xScale = d3.scaleLinear()
+  var xScale = d3.scaleLinear()
     .domain(d3.extent(pol_agg, function(d){ return d.month; }))
     .range([0,width])
     .nice();
 
-  yScale = d3.scaleLinear()
+  var yScale = d3.scaleLinear()
     .domain(d3.extent(pol_agg, function(d){ return d.year; }))
     .range([height,0])
     .nice();
+
+  // Color Scale using d3.scaleQuantize, which has a discrete range:
+  var colorScale = d3.scaleQuantize()
+      .domain([0, colors.length - 1, d3.max(pol_agg, function (d) { return d.count; })])
+      .range(colors);
 
   var tiles = g.selectAll(".tiles")
     .data(pol_agg)
@@ -90,7 +99,7 @@ function createHeatmap(pol = data) {
     .attr("y", function(d){ return yScale(d.year)})
     .attr("width", 50)
     .attr("height", 50)
-    .style("fill", "rgb(255, 99, 71)");
+    .style("fill", function(d){ return colorScale(d.count)});
 
 };
 
